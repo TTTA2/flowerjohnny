@@ -1,0 +1,37 @@
+{
+  "name": "flowerjohnny",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.3",
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/addon-interactions": "^8.4.7",
+    "@storybook/addon-svelte-csf": "^5.0.0-next.21",
+    "@storybook/blocks": "^8.4.7",
+    "@storybook/svelte": "^8.4.7",
+    "@storybook/svelte-vite": "^8.4.7",
+    "@storybook/test": "^8.4.7",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tsconfig/svelte": "^5.0.4",
+    "storybook": "^8.4.7",
+    "svelte": "^5.15.0",
+    "svelte-check": "^4.1.1",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@material/web": "^2.2.0",
+    "vite-plugin-singlefile": "^2.1.0"
+  }
+}
