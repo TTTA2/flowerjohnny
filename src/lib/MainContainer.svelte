@@ -7,6 +7,7 @@
     import Tab from "./components/Tab/Tab.svelte";
     import PrimaryTab from "./components/Tab/PrimaryTab.svelte";
     import TabPanel from "./components/Tab/TabPanel.svelte";
+    import Divider from "./components/Divider.svelte";
 
     let selectedNode: DocNode | undefined = $state();
     let selectedTemplateNode: DocNode | undefined = $state();
@@ -33,6 +34,14 @@
 
 	let selectedTabId = $state("aa");
 	$inspect(selectedTabId);
+
+    let nodeSelecterElement: HTMLElement | undefined = $state(undefined);
+    let nodeSelecterHeight = $state(0);
+
+    const handleScrollMoving = (top: number) => {
+        nodeSelecterElement?.scroll({ top, behavior: "smooth" });
+    }
+
 
 </script>
 
@@ -69,19 +78,18 @@
 		{#snippet tabPanels()}
 			<div role="tabpanel" data-tabId="aa" style="height:100%;">
                 <grid-selecter>
-                    <NodeSelecter nodes={nodes} {onChangeSelectedNodes}></NodeSelecter>
+                    <div class="node-selecter-background" bind:this={nodeSelecterElement} bind:clientHeight={nodeSelecterHeight}>
+                        <NodeSelecter nodes={nodes} onScrollMoving={handleScrollMoving} {onChangeSelectedNodes} parentHeight={nodeSelecterHeight}></NodeSelecter>
+                    </div>
                     <TemplatesList nodes={getChildNodes(nodes, selectedNode)} onClickNode={onChangeSelectedTemplateNode}></TemplatesList>
                 </grid-selecter>
 			</div>
-            
-			<!-- <TabPanel tabId="bb">
-				test1
-			</TabPanel> -->
+
 		{/snippet}
 
 	</Tab>
 
-
+    <Divider direction="verctial"></Divider>
 
     <View content={selectedTemplateNode?.content ?? ""}></View>
     <!-- <div>{selectedNode?.caption}</div> -->
@@ -97,7 +105,7 @@
         height: 100%;
         display: grid;
         grid-template-rows: 100%;
-        grid-template-columns: 0.5fr 0.5fr;
+        grid-template-columns: 0.5fr auto 0.5fr;
     }
 
     grid-selecter {
@@ -105,7 +113,20 @@
         height: 100%;
         display: grid;
         grid-template-columns: 0.5fr 0.5fr;
+        grid-template-rows: 100%;
         overflow: hidden;
+    }
+
+    .node-selecter-background {
+        background-color: var(--md-sys-color-surface-container-low, white);
+        color: var(--md-sys-color-on-surface, white);
+        overflow: auto;
+        position: relative;
+    }
+
+    hr {
+        padding: 0;
+        margin: 0;
     }
 
     .iconTab {

@@ -7,6 +7,7 @@
 		children?: Snippet, 
 		onclick?: (e: MouseEvent) => void, 
 		selected?: boolean,
+
 	} = $props();
 
 	const handleClick = (e: MouseEvent) => {
@@ -25,7 +26,8 @@
 
 .cornner {
 	position: relative;
-	/* border-radius: 8px; */
+	border-radius: 12px;
+	padding: 4px;
 }
 
 .selected {
@@ -35,6 +37,8 @@
 .item {
 	user-select: none;
 	padding: 6px;
+	padding-left: 4px;
+	border-radius: 12px;
 }
 
 

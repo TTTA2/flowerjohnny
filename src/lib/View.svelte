@@ -80,7 +80,11 @@ $effect(() => {
 						</div>
 					</div>
 	
-					<div>{ node.text }</div>
+					<div class="textWrapper">
+						<div>
+							{ node.text }
+						</div>
+					</div>
 				</div>
 			{/if}
 	
@@ -144,6 +148,10 @@ $effect(() => {
 .text {
 	padding: 6px;
 	white-space: pre;
+}
+
+.textWrapper {
+	display: flex;
 }
 
 .description {

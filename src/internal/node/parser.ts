@@ -57,7 +57,7 @@ export const createNodes = (source: string) => {
 	}
 
 	if ((i) - nodeStartIndex > 0) {
-		const s = source.slice(nodeStartIndex, i).trim();
+		const s = source.slice(nodeStartIndex, i).replace(/(^\n)/g, "");
 		textNodes.push({ type: "Text", text: s });
 		// textNodes.push({ type: "Text", text: s.slice(1, s.length) });
 	}

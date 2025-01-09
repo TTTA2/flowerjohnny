@@ -1,10 +1,6 @@
 <script lang="ts">
 import type { Snippet, SvelteComponent } from "svelte";
 import type { DocNode } from "../internal/node/node";
-import Button from "./components/Button.svelte";
-import Card from "./components/Card/Card.svelte";
-import CardBody from "./components/Card/CardBody.svelte";
-import CardTitle from "./components/Card/CardTitle.svelte";
 import ListItem from "./components/ListItem.svelte";
 import StickyTitle from "./StickyTitle.svelte";
 
@@ -15,7 +11,7 @@ type Props = {
     children?: Snippet,
     onSelectNode: (node: DocNode) => void,
     currentHeight: number,
-    render?: (height: number) => void,
+    render?: (type: "title" | "nodeGroup", height: number) => void,
     onClickHeader?: () => void,
 }
 
@@ -23,6 +19,11 @@ let { nodes, parentNode, selectedNode, onSelectNode, children, currentHeight, re
 
 let element: HTMLElement | undefined = $state(undefined);
 let height = $state(0);
+let listHeight = $state(0);
+
+$inspect(listHeight);
+
+const hasChildren = $derived(nodes.length > 0);
 
 const handleClickNode = (node: DocNode) => {
     onSelectNode?.call(undefined, node);
@@ -34,28 +35,28 @@ const handleClickHead = () => {
 }
 
 $effect(() => {
-    // console.log(height);
-    // console.log(parentNode);
-    render?.call(undefined, height);
+    if (hasChildren) {
+        render?.call(undefined, "title", height);
+    }
+});
+
+$effect(() => {
+    if (hasChildren) {
+        render?.call(undefined, "nodeGroup", listHeight);
+    }
 });
 
 </script>
 
-<div bind:this={element} >
-    <StickyTitle onclick={handleClickHead} style={`top: ${currentHeight}px`} bind:height={height}>{parentNode?.caption ?? "親"}</StickyTitle>
-    <Card variant="outline">
-        <CardTitle> </CardTitle>
-        <CardBody>
-            {#each nodes as node}
-                <ListItem selected={selectedNode?.id == node.id} onclick={() => handleClickNode(node)}>{node.caption}</ListItem>
-            {/each}
-            <!-- <Button variant="tonal" onclick={(e) => console.log(e)}>aa</Button> -->
-        </CardBody>
-    </Card>
-    
-    {@render children?.()}
-    
-</div>
+{#if hasChildren}
+    <div bind:this={element} bind:clientHeight={listHeight}>
+        <StickyTitle onclick={handleClickHead} style={`top: ${currentHeight}px`} bind:height={height}>{parentNode?.caption ?? "親"}</StickyTitle>
+        {#each nodes as node}
+            <ListItem selected={selectedNode?.id == node.id} onclick={() => handleClickNode(node)}>{node.caption}</ListItem>
+        {/each}
+        {@render children?.()}
+    </div>
+{/if}
 
 <style>
  

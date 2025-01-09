@@ -44,7 +44,7 @@
 <style>
 
 .title {
-	margin: 4px 0 4px 0;
+	/* margin: 4px 0 4px 0; */
 	font-weight: bold;
 	font-size: 12pt;
 	position: sticky;
@@ -52,11 +52,14 @@
 	background-color: var(--md-sys-color-on-primary);
 	z-index: 1;
 	cursor: pointer;
-
+	/* padding: 4px; */
+	border-radius: 8px;
 }
 
 .rippleContainer {
+	padding: 6px;
 	position: relative;
+	border-radius: 8px;
 }
 
 .container2 {

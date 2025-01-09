@@ -1,78 +1,70 @@
-import { test, expect } from 'vitest'
-import { createNodes } from '../internal/node/parser';
+import { describe, it, expect } from "vitest";
+import { createNodes } from "../internal/node/parser";
+// import { createNodes } from "./path/to/your/module"; // モジュールのパスを指定
 
-const testData1 = 
-`$$$$$
-強調テスト
+describe("createNodes", () => {
+  it("should parse text without tokens correctly", () => {
+    const source = "This is plain text without tokens.";
+    const result = createNodes(source);
 
-%%%%%
-コード
-%%%%%
-$$$$$
-一行目
+    expect(result).toEqual([
+      { type: "Text", text: "This is plain text without tokens." },
+    ]);
+  });
 
-%%%%%
-コード
-%%%%%
+  it("should parse text with Description tokens correctly", () => {
+    const source = "Text before $$$$$ Description token.";
+    const result = createNodes(source);
 
-二行目
+    expect(result).toEqual([
+      { type: "Text", text: "Text before " },
+      { type: "Text", text: " Description token." },
+    ]);
+  });
 
-三行目
+  it("should parse text with Template tokens correctly", () => {
+    const source = "Text before %%%%% Template token.";
+    const result = createNodes(source);
 
-$$$$$
-強調一行目
+    expect(result).toEqual([
+      { type: "Text", text: "Text before " },
+      { type: "Text", text: " Template token." },
+    ]);
+  });
 
-強調二行目
-強調三行目
-$$$$$
+  it("should handle multiple tokens in a string", () => {
+    const source = "Start $$$$$ middle %%%%% end.";
+    const result = createNodes(source);
 
-こんにちは
+    expect(result).toEqual([
+      { type: "Text", text: "Start " },
+      { type: "Text", text: " middle %%%%% end." },
+    ]);
+  });
 
-こんばんは
-`;
+  it("should ignore incomplete token sequences", () => {
+    const source = "Text with incomplete $$ tokens.";
+    const result = createNodes(source);
 
-const testData2 = 
-`$$$$$
-強調テスト
-$$$$$
-`;
+    expect(result).toEqual([
+      { type: "Text", text: "Text with incomplete $$ tokens." },
+    ]);
+  });
 
+  it("should trim leading newlines in segments", () => {
+    const source = "Text before\n$$$$$ Description with newline.";
+    const result = createNodes(source);
 
-const result2 = [
-	`強調テスト`,
-	]
+    expect(result).toEqual([
+      { type: "Text", text: "Text before\n" },
+      { type: "Text", text: " Description with newline." },
+    ]);
+  });
 
-// const result1 = [
-// `強調テスト
+  it("should handle empty input", () => {
+    const source = "";
+    const result = createNodes(source);
 
-// %%%%%
-// コード
-// %%%%%`,
-
-// `一行目
-// `,
-
-// `コード`,
-
-// `
-// 二行目
-
-// 三行目
-// `,
-
-// `強調一行目
-
-// 強調二行目
-// 強調三行目`,
-
-// `
-// こんにちは
-
-// こんばんは
-// `
-
-// ]
-
-test('testTest', () => {
-  expect(createNodes(testData2)).toStrictEqual(result2)
-})
+    expect(result).toEqual([]);
+  });
+});
